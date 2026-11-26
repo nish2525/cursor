@@ -17,64 +17,176 @@ button{font:inherit;cursor:pointer}#world{position:fixed;inset:0;overflow:hidden
 .nav{position:fixed;z-index:8;top:27px;right:clamp(20px,4vw,72px);display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;max-width:67vw}
 .nav button{border:1px solid #fffaf3c7;background:#fffaf0e8;border-radius:30px;backdrop-filter:blur(14px);padding:11px 16px;font-size:12px;font-weight:750;color:#233d53;box-shadow:0 5px 24px #24466736;transition:transform .2s,background .2s}
 .nav button:hover{background:white;transform:translateY(-2px)}
-.nav button[aria-current=page]{color:white;background:#234967;border-color:#234967}
-.hero{position:fixed;z-index:3;left:clamp(20px,4.4vw,78px);top:26%;width:min(350px,35vw);pointer-events:none;color:white;text-shadow:0 3px 26px #193c6285;transition:opacity .5s}
-.hero .eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#fff2d4;font-weight:850}
-.hero h1{font-size:clamp(36px,5vw,72px);font-weight:820;line-height:1.02;letter-spacing:-3px;margin:18px 0}
-.hero p{line-height:1.7;font-size:14px;max-width:300px;color:#fff9ea}
+.nav button[aria-current=location]{color:white;background:#234967;border-color:#234967}
 .footer{position:fixed;z-index:5;bottom:29px;right:clamp(18px,4vw,72px);font-size:10px;font-weight:750;text-transform:uppercase;letter-spacing:1.2px;color:#fff;pointer-events:none;text-shadow:0 2px 16px #19334d}
-.panel{position:fixed;z-index:9;top:50%;right:clamp(20px,4vw,72px);width:min(395px,calc(100vw - 40px));padding:30px;border:1px solid #fff;border-radius:22px;background:#fff9eef6;box-shadow:0 24px 72px #1c3b5c5e;backdrop-filter:blur(18px);transform:translate(130%,-50%);opacity:0;pointer-events:none;transition:transform .5s cubic-bezier(.18,.85,.25,1),opacity .3s}
+.panel{position:fixed;z-index:9;top:50%;right:clamp(20px,4vw,72px);width:min(395px,calc(100vw - 40px));padding:30px;max-height:calc(100dvh - 120px);overflow:auto;border:1px solid #fff;border-radius:22px;background:#fff9eef6;box-shadow:0 24px 72px #1c3b5c5e;backdrop-filter:blur(18px);transform:translate(130%,-50%);opacity:0;pointer-events:none;transition:transform .5s cubic-bezier(.18,.85,.25,1),opacity .3s}
 .panel.show{opacity:1;transform:translate(0,-50%);pointer-events:auto}
 .panel .x{position:absolute;right:18px;top:18px;background:#e6e4dd;color:#253f55;border:0;border-radius:50%;width:34px;height:34px;font-size:21px}
-.category{font-size:10px;color:#a8784e;font-weight:900;letter-spacing:2px;text-transform:uppercase}
-.emoji{font-size:62px;line-height:1;margin-top:23px}
+.animals{display:grid;gap:14px;list-style:none;margin:18px 0 0;padding:0}
+.animals li{display:flex;gap:12px;align-items:flex-start;border-top:1px solid #d8d4ca;padding-top:12px}
+.animal-icon,.animal-image{flex:none;width:44px;height:44px;border-radius:8px;background:#f0e8dc;object-fit:cover}
+.animal-icon{display:grid;place-items:center;font-size:24px}
+.animals h3{font-size:15px;margin:0 0 4px}
+.status{position:fixed;z-index:6;bottom:22px;left:50%;width:max-content;max-width:calc(100vw - 40px);transform:translateX(-50%);margin:0;padding:8px 14px;border-radius:30px;background:#fffaf0e8;text-align:center}
+.status:empty{padding:0}
+.panel[inert]{visibility:hidden}
 .panel h2{font-size:29px;letter-spacing:-1.2px;margin:15px 0 12px;line-height:1.1}
 .panel p{font-size:14px;line-height:1.75;color:#4d6372;margin:0}
-.fact{font-size:13px;line-height:1.55;margin-top:22px;padding-top:16px;border-top:1px solid #d8d4ca;color:#4d6372}
-.fact b{display:block;margin-bottom:5px;color:#9c714b;font-size:10px;letter-spacing:1.2px}
 .next{background:#22475f;color:white;padding:13px 18px;border:none;border-radius:11px;font-size:13px;font-weight:750;margin-top:23px}
 #error{display:none;position:fixed;z-index:15;inset:0;align-items:center;justify-content:center;background:#d8e4ee;padding:22px}
 #error div{max-width:500px;background:white;border-radius:20px;padding:28px;box-shadow:0 16px 50px #1a2c4530}
 #error h2{margin-top:0}
-@media(max-width:850px){.brand{top:15px;left:18px}.brand-icon{width:36px;height:36px}.brand strong{font-size:15px}.brand small{font-size:8px;letter-spacing:1px}.nav{top:71px;left:14px;right:14px;max-width:none;justify-content:center;gap:6px}.nav button{padding:8px 10px;font-size:11px}.hero{top:18%;width:245px;left:20px}.hero h1{font-size:41px}.hero p{font-size:12px}.panel{top:auto;bottom:12px;right:14px;padding:20px;max-height:65vh;overflow:auto;transform:translateY(130%)}.panel.show{transform:translateY(0)}.panel h2{font-size:23px}.footer{bottom:8px;right:12px;font-size:8px}}
+@media(max-width:850px){.brand{top:15px;left:18px}.brand-icon{width:36px;height:36px}.brand strong{font-size:15px}.brand small{font-size:8px;letter-spacing:1px}.nav{top:71px;left:14px;right:14px;max-width:none;justify-content:center;gap:6px}.nav button{padding:10px 11px;font-size:12px}.panel{top:auto;bottom:12px;right:14px;padding:20px;width:min(395px,calc(100vw - 28px));max-height:50dvh;overflow:auto;transform:translateY(130%)}.panel.show{transform:translateY(0)}.panel h2{font-size:23px}.footer{bottom:8px;right:12px;font-size:8px}}
+:focus-visible{outline:2px solid #22475f;outline-offset:3px}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition-duration:0s!important}}
 </style>
 </head>
 <body>
 <div id="world" aria-label="Interactive 3D floating islands and airship"></div>
 <header class="brand"><div class="brand-icon">✦</div><div><strong>ANIMAL ATLAS</strong><small>Explore · Discover · Protect</small></div></header>
-<nav class="nav" aria-label="Fly to a wildlife island"><button data-island="rainforest">Rainforest</button><button data-island="ocean">Ocean</button><button data-island="savannah">Savannah</button><button data-island="mountains">Mountains</button></nav>
-<section id="hero" class="hero"><div class="eyebrow">A world of wildlife awaits</div><h1>Take flight.<br>Explore life.</h1><p>Fly through the clouds. Visit floating islands and discover the extraordinary animals that share our planet.</p></section>
-<footer class="footer">A 3D wildlife adventure · Student ECA project</footer>
-<aside id="panel" class="panel" aria-label="Island wildlife information" aria-hidden="true"><button id="close" class="x" aria-label="Close information">×</button><div id="category" class="category"></div><div id="emoji" class="emoji"></div><h2 id="heading"></h2><p id="description"></p><div class="fact"><b>WILDLIFE FACT</b><span id="fact"></span></div><button id="next" class="next">Explore the next island →</button></aside>
-<div id="error" role="alert"><div><h2>3D world couldn't start</h2><p>Please use an up-to-date browser with WebGL enabled and allow the Three.js library to load.</p><small id="errorDetail"></small></div></div>
+<nav class="nav" aria-label="Fly to a wildlife island"></nav>
+<footer class="footer">Student ECA project</footer>
+<p id="flight-status" class="status" role="status"></p>
+<aside id="panel" class="panel" aria-labelledby="heading" inert>
+  <button id="close" class="x" aria-label="Close information">×</button>
+  <h2 id="heading" tabindex="-1"></h2>
+  <p id="description"></p>
+  <ul id="animals" class="animals"></ul>
+  <button id="next" class="next">Explore the next island</button>
+</aside>
+<div id="error" role="alert"><div><h2>3D world couldn't start</h2><p>Please use an up-to-date browser with WebGL enabled and reload this page.</p><small id="errorDetail"></small></div></div>
 <script type="module">
-const islands=[
-{key:"rainforest",label:"FOREST",title:"Rainforest",x:-58,z:-12,r:15,kind:"studio",dock:-.6,emoji:"🦜",category:"01 / TROPICAL RAINFOREST",description:"Rainforests shelter an extraordinary variety of wildlife. Colourful birds, monkeys, and insects live amongst tall trees and rich vegetation.",fact:"Tropical rainforests contain a remarkable share of Earth's terrestrial biodiversity."},
-{key:"ocean",label:"OCEAN",title:"Coral Ocean",x:-24,z:-78,r:12,kind:"library",dock:1.9,emoji:"🐢",category:"02 / MARINE LIFE",description:"Sea turtles travel vast distances through the ocean. Coral reefs provide important food and shelter for thousands of species.",fact:"Some sea turtles migrate thousands of kilometres between nesting and feeding sites."},
-{key:"savannah",label:"GRASSLAND",title:"Savannah",x:34,z:-100,r:11,kind:"beacon",dock:1.6,emoji:"🦒",category:"03 / GRASSLANDS",description:"Giraffes, elephants, and zebras live in open grasslands. Animals and plants help maintain balance in this remarkable ecosystem.",fact:"A giraffe's tongue can be about 45–50 centimetres long."},
-{key:"mountains",label:"HIGHLANDS",title:"Mountains",x:66,z:-22,r:16,kind:"gallery",dock:3.6,emoji:"🦅",category:"04 / MOUNTAIN WILDLIFE",description:"High above the forests, eagles soar on rising currents of air. Mountain animals have special adaptations for difficult habitats.",fact:"Some eagles can glide for long periods while barely flapping their wings."}
-];
-const lookup=Object.fromEntries(islands.map(x=>[x.key,x]));
-const el=id=>document.getElementById(id), panel=el("panel"), nav=[...document.querySelectorAll(".nav button")];
-let world=null;window.__atlasReady=false;
-function hide(){panel.classList.remove("show");panel.setAttribute("aria-hidden","true");nav.forEach(x=>x.removeAttribute("aria-current"))}
-function sail(key){if(!world)return;hide();el("hero").style.opacity="0";world.command({type:"sail",key})}
-nav.forEach(button=>button.addEventListener("click",()=>sail(button.dataset.island)));
-el("close").addEventListener("click",()=>{hide();world?.command({type:"undock"})});
-el("next").addEventListener("click",()=>{const i=islands.findIndex(x=>x.key===panel.dataset.key);sail(islands[(i+1)%islands.length].key)});
-window.addEventListener("skyarch",e=>{
-const d=e.detail||{};
-if(d.type==="start")el("hero").style.opacity="0";
-if(d.type==="leave")hide();
-if(d.type==="arrive"&&lookup[d.key]){const i=lookup[d.key];panel.dataset.key=i.key;el("category").textContent=i.category;el("emoji").textContent=i.emoji;el("heading").textContent=i.title;el("description").textContent=i.description;el("fact").textContent=i.fact;panel.classList.add("show");panel.setAttribute("aria-hidden","false");nav.forEach(b=>{if(b.dataset.island===i.key)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")})}
+import { wildlife } from "./wildlife.js";
+
+const islands = [
+    { key: "rainforest", x: -58, z: -12, r: 15, kind: "studio", dock: -.6 },
+    { key: "ocean", x: -24, z: -78, r: 12, kind: "library", dock: 1.9 },
+    { key: "savannah", x: 34, z: -100, r: 11, kind: "beacon", dock: 1.6 },
+    { key: "mountains", x: 66, z: -22, r: 16, kind: "gallery", dock: 3.6 },
+].map(island => ({ ...island, title: wildlife[island.key].title, label: "" }));
+
+const el = id => document.getElementById(id);
+const panel = el("panel");
+const status = el("flight-status");
+const navButtons = new Map();
+let world;
+let activeHabitat;
+let returnFocus;
+
+function sail(key) {
+    world?.command({ type: "sail", key });
+}
+
+for (const { key, title } of islands) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.island = key;
+    button.disabled = true;
+    button.textContent = title;
+    button.addEventListener("click", () => sail(key));
+    document.querySelector(".nav").append(button);
+    navButtons.set(key, button);
+}
+
+function hidePanel() {
+    if (panel.contains(document.activeElement)) returnFocus?.focus();
+    panel.classList.remove("show");
+    panel.inert = true;
+    navButtons.get(activeHabitat)?.removeAttribute("aria-current");
+}
+
+function animalCard(animal) {
+    const item = document.createElement("li");
+    const icon = document.createElement("span");
+    icon.className = "animal-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = animal.icon;
+    let visual = icon;
+    if (animal.image) {
+        const image = document.createElement("img");
+        image.className = "animal-image";
+        image.alt = animal.imageAlt || "";
+        image.src = animal.image;
+        image.addEventListener("error", () => image.replaceWith(icon), { once: true });
+        visual = image;
+    }
+    const copy = document.createElement("div");
+    const name = document.createElement("h3");
+    name.textContent = animal.name;
+    const description = document.createElement("p");
+    description.textContent = animal.description;
+    copy.append(name, description);
+    item.append(visual, copy);
+    return item;
+}
+
+function showPanel(key) {
+    const habitat = wildlife[key];
+    activeHabitat = key;
+    el("heading").textContent = habitat.title;
+    el("description").textContent = habitat.description;
+    el("animals").replaceChildren(...habitat.animals.map(animalCard));
+    panel.scrollTop = 0;
+    panel.inert = false;
+    panel.classList.add("show");
+    navButtons.get(key).setAttribute("aria-current", "location");
+    if (document.activeElement === returnFocus) el("heading").focus({ preventScroll: true });
+}
+
+el("close").addEventListener("click", () => world?.command({ type: "undock" }));
+el("next").addEventListener("click", () => {
+    const index = islands.findIndex(island => island.key === activeHabitat);
+    sail(islands[(index + 1) % islands.length].key);
 });
-try{
-const {createSkyArchipelago}=await import("./sky-world.js");
-world=createSkyArchipelago(el("world"),{islands,accent:"#d7a76e",envelope:"#be6e53",ink:"#19374e",timeOfDay:"day",controls:true,labels:true,sound:false,interactive:true,loaderTitle:"Animal Atlas",loaderSubtitle:"A wildlife adventure",loaderMark:true,plate:"rgba(255,250,239,0.92)"});
-window.__atlasReady=true;
-window.__atlasWorld=world;
-}catch(e){console.error("Animal Atlas loading error:",e);el("errorDetail").textContent=String(e?.message||e);el("error").style.display="flex"}
+
+window.addEventListener("skyarch", ({ detail }) => {
+    switch (detail.type) {
+        case "loaded":
+            navButtons.forEach(button => { button.disabled = false; });
+            if (!window.__skyarch?.started) status.textContent = "Choose a habitat or click an island.";
+            break;
+        case "start":
+            status.textContent = "";
+            break;
+        case "sail":
+            returnFocus = navButtons.get(detail.key);
+            status.textContent = `Flying to ${wildlife[detail.key].title}…`;
+            break;
+        case "leave":
+            hidePanel();
+            status.textContent = "";
+            break;
+        case "arrive":
+            status.textContent = "";
+            showPanel(detail.key);
+            break;
+    }
+});
+
+try {
+    const { createSkyArchipelago } = await import("./sky-world.js");
+    world = createSkyArchipelago(el("world"), {
+        islands,
+        accent: "#d7a76e",
+        envelope: "#be6e53",
+        ink: "#19374e",
+        timeOfDay: "day",
+        controls: true,
+        labels: true,
+        sound: false,
+        interactive: true,
+        loaderTitle: "Animal Atlas",
+        loaderSubtitle: "A wildlife adventure",
+        loaderMark: true,
+        plate: "rgba(255,250,239,0.92)",
+    });
+    window.__atlasReady = true;
+    window.__atlasWorld = world;
+} catch (error) {
+    console.error("Animal Atlas loading error:", error);
+    el("errorDetail").textContent = error.message;
+    el("error").style.display = "flex";
+}
 </script>
 </body>
 </html>
