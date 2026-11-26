@@ -1,5 +1,5 @@
 // Restored original SkyArchipelago 3D WebGL engine
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.165.0/+esm";
+import * as THREE from "./vendor/three.module.min.js";
 const EVT = "skyarch"
 const DEFAULTS = {
     islands: [
@@ -1478,8 +1478,8 @@ function createSkyArchipelago(container, opts = {}) {
 .sa-ctrl{position:absolute;left:28px;bottom:72px;display:flex;flex-direction:column;gap:8px;pointer-events:auto;transition:opacity .35s}
 .sa-btn{width:42px;height:42px;border-radius:999px;border:0;background:${o.plate};backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 6px 24px rgba(15,27,36,.12);display:grid;place-items:center;cursor:pointer;color:${o.ink};transition:transform .2s}
 .sa-btn:hover{transform:scale(1.08)}.sa-btn svg{width:18px;height:18px}
-.sa-help{position:absolute;left:80px;bottom:72px;background:${o.plate};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:16px;padding:14px 16px;box-shadow:0 10px 40px rgba(15,27,36,.16);display:grid;grid-template-columns:auto auto;gap:7px 16px;font-size:13px;pointer-events:auto;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
-.sa-help.on{opacity:1;transform:none}.sa-help kbd{font:600 11px/1.2 'Inter',system-ui,sans-serif;background:rgba(15,27,36,.07);border-radius:6px;padding:3px 6px;justify-self:start}
+.sa-help{position:absolute;left:80px;bottom:72px;background:${o.plate};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:16px;padding:14px 16px;box-shadow:0 10px 40px rgba(15,27,36,.16);display:grid;grid-template-columns:auto auto;gap:7px 16px;font-size:13px;pointer-events:none;visibility:hidden;opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s}
+.sa-help.on{opacity:1;transform:none;visibility:visible;pointer-events:auto}.sa-help kbd{font:600 11px/1.2 'Inter',system-ui,sans-serif;background:rgba(15,27,36,.07);border-radius:6px;padding:3px 6px;justify-self:start}
 .sa-prompt{position:absolute;left:50%;bottom:28px;transform:translate(-50%,12px);display:flex;white-space:nowrap;gap:4px;padding:5px;border-radius:999px;background:${o.plate};backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 8px 30px rgba(15,27,36,.14);opacity:0;transition:opacity .35s,transform .35s;pointer-events:none}
 .sa-prompt.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}.sa-prompt span{padding:9px 14px}.sa-prompt button{border:0;border-radius:999px;padding:9px 16px;background:${o.ink};color:#fff;font:inherit;cursor:pointer}
 .sa-load{position:absolute;inset:0;display:grid;place-items:center;background:#F4F0EB;transition:opacity .9s;pointer-events:auto;z-index:5}
@@ -1495,7 +1495,12 @@ function createSkyArchipelago(container, opts = {}) {
             const el = doc.createElement("button")
             el.type = "button"
             el.className = "sa-pill"
-            el.innerHTML = `<i></i>${isl.title}<b>${isl.label}</b>`
+            el.append(doc.createElement("i"), isl.title)
+            if (isl.label) {
+                const label = doc.createElement("b")
+                label.textContent = isl.label
+                el.append(label)
+            }
             el.setAttribute("aria-label", "Fly to " + isl.title)
             el.addEventListener("pointerdown", (e) => e.stopPropagation())
             el.addEventListener("click", (e) => {
@@ -1740,6 +1745,7 @@ loadIn = loader.querySelector(".sa-load-in")
             emit("leave", prev)
         }
         auto = null
+        backOff = null
         const dist = Math.hypot(isl.dockPos.x - sp.x, isl.dockPos.z - sp.z)
         const T = reduced ? 0.35 : clamp(dist / 15, 5.5, 8.5)
         const f = Math.min(dist * 0.35, 34)
@@ -2232,12 +2238,11 @@ loadIn = loader.querySelector(".sa-load-in")
                 .clone()
                 .multiplyScalar(Math.cos(ang))
                 .addScaledVector(side, -Math.sin(ang))
+            const portraitScale = clamp(0.8 / camera.aspect, 1, 1.4)
             eye = mid
                 .clone()
-                .addScaledVector(dirC, 40 + docked.r * 1.9)
+                .addScaledVector(dirC, (40 + docked.r * 1.9) * portraitScale)
                 .add(new THREE.Vector3(0, 7 + docked.r * 0.3, 0))
-            const toEye = eye.clone().sub(mid).setY(0).normalize()
-            const right = new THREE.Vector3(-toEye.z, 0, toEye.x)
             target = mid.clone().add(new THREE.Vector3(0, -1, 0))
             if (xfer) {
                 // during the transfer: a high chase shot that hands over to the docked framing
@@ -2288,8 +2293,9 @@ loadIn = loader.querySelector(".sa-load-in")
             cam.look.copy(target)
         }
         // keep the island clear of the panel (desktop: right panel, phone: bottom sheet)
-        const wantX = docked && W >= 810 ? Math.min(226, W * 0.18) : 0,
-            wantY = docked && W < 810 ? Hh * 0.28 : 0
+        const panelOpen = docked && !xfer
+        const wantX = panelOpen && W > 850 ? Math.min(205, W * 0.19) : 0,
+            wantY = panelOpen && W <= 850 ? Hh * 0.21 : 0
         cam.vx = damp(cam.vx, wantX, 2.6, dt)
         cam.vy = damp(cam.vy, wantY, 2.6, dt)
         if (Math.abs(cam.vx) > 0.5 || Math.abs(cam.vy) > 0.5)
@@ -2334,21 +2340,22 @@ loadIn = loader.querySelector(".sa-load-in")
             }
             if (!el._hw || el._hw < 20)
                 el._hw = (el.offsetWidth || 120) / 2 + 10
+            const topEdge = W <= 850 ? 150 : 104
             const edgeX = el._hw,
                 off =
                     behind ||
                     x < edgeX ||
                     x > W - edgeX ||
-                    y < 96 ||
+                    y < topEdge ||
                     y > Hh - 40
             let arrow = ""
             if (off) {
                 if (x < edgeX) arrow = "←"
                 else if (x > W - edgeX) arrow = "→"
-                else if (y < 96) arrow = "↑"
+                else if (y < topEdge) arrow = "↑"
                 else arrow = "↓"
                 x = clamp(x, edgeX, W - edgeX)
-                y = clamp(y, 108, Hh - 40)
+                y = clamp(y, topEdge + 12, Hh - 40)
             }
             const vis = state.docked !== isl.key && !(off && state.docked)
             const dd = camera.position.distanceTo(
@@ -2443,9 +2450,10 @@ loadIn = loader.querySelector(".sa-load-in")
         }
         updateLabels()
         if (ctrlEl) {
-            const hide = !!state.docked && W < 810
+            const hide = !!state.docked && !xfer && W <= 850
             if (ctrlEl._h !== hide) {
                 ctrlEl._h = hide
+                ctrlEl.inert = hide
                 ctrlEl.style.opacity = hide ? "0" : "1"
                 ctrlEl.style.pointerEvents = hide ? "none" : "auto"
             }
